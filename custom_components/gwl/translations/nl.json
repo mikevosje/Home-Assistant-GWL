@@ -1,0 +1,60 @@
+{
+    "config": {
+        "step": {
+            "power_consumers": {
+                "title": "GasWaterLicht configuratie (1/3)",
+                "description": "Welkom bij de GasWaterLicht integratie. Deze integratie zal proberen jou te helpen onder het Nederlandse prijsplafond te blijven. Dit door het aanbieden van een 2-tal sensoren welke het huidige (maandelijks) verbruik tot nu toe bevatten. Daarnaast bevat de attributen informatie zoals wat is het huidige plafond and de daarbijbehorende kosten. Om stap 1 te voltooien, selecteer alle netverbruikers die het totaal beschrijven en druk op volgende.",
+                "data": {
+                    "sources_total_power": "Netverbruikers"
+                }
+            },
+            "power_producers": {
+                "title": "GasWaterLicht configuratie (2/3)",
+                "description": "Energie opwekkers - Selecteer alle energie opwekkers (voorbeeld: zonnepanelen).",
+                "data": {
+                    "sources_total_solar": "Energie opwekkers"
+                }
+            },
+            "gas_consumers": {
+                "title": "GasWaterLicht configuratie (3/3)",
+                "description": "Gasverbruikers - Selecteer alle gasverbruikers.",
+                "data": {
+                    "sources_total_gas": "Gasverbruikers"
+                }
+            }
+        },
+        "error": {
+            "invalid_sources_total_power": "Selecteer tenminste 1 netverbruiker.",
+            "invalid_sources_total_gas": "Selecteer tenminste 1 gasverbruiker."
+        }
+    },
+    "options": {
+        "step": {
+            "power_consumers": {
+                "title": "GasWaterLicht configuratie (1/3)",
+                "description": "Welkom bij de GasWaterLicht integratie. Deze integratie zal proberen jou te helpen onder het Nederlandse prijsplafond te blijven. Dit door het aanbieden van een 2-tal sensoren welke het huidige (maandelijks) verbruik tot nu toe bevatten. Daarnaast bevat de attributen informatie zoals wat is het huidige plafond and de daarbijbehorende kosten. Om stap 1 te voltooien, selecteer alle netverbruikers die het totaal beschrijven en druk op volgende.",
+                "data": {
+                    "sources_total_power": "Netverbruikers"
+                }
+            },
+            "power_producers": {
+                "title": "GasWaterLicht configuratie (2/3)",
+                "description": "Energie opwekkers - Selecteer alle energie opwekkers (voorbeeld: zonnepanelen).",
+                "data": {
+                    "sources_total_solar": "Energie opwekkers"
+                }
+            },
+            "gas_consumers": {
+                "title": "GasWaterLicht configuratie (3/3)",
+                "description": "Gasverbruikers - Selecteer alle gasverbruikers.",
+                "data": {
+                    "sources_total_gas": "Gasverbruikers"
+                }
+            }
+        },
+        "error": {
+            "invalid_sources_total_power": "Selecteer tenminste 1 netverbruiker.",
+            "invalid_sources_total_gas": "Selecteer tenminste 1 gasverbruiker."
+        }
+    }
+}
