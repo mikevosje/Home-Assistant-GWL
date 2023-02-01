@@ -5,7 +5,7 @@ _LOGGER = logging.getLogger(__name__)
 
 # Integration common info.
 NAME = "GasWaterLicht"
-DOMAIN = "wappz"
+DOMAIN = "gwlwappz"
 
 # Prices and defaults.
 PRICE_CAP_GAS_MONTH = {
