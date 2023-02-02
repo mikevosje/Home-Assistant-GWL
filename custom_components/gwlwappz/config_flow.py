@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import Any, cast
+import logging
 
 import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
@@ -15,6 +16,9 @@ from .const.const import (
     _LOGGER, CONF_SOURCES_TOTAL_GAS, CONF_SOURCES_TOTAL_POWER, 
     CONF_SOURCES_TOTAL_SOLAR, DOMAIN, NAME
 )
+
+_LOGGER = logging.getLogger(__name__)
+logging.getLogger("custom_components.gwlwappz").setLevel(logging.DEBUG)
 
 SOURCES_TOTAL_POWER_SCHEMA = vol.Schema(
     {
