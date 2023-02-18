@@ -29,7 +29,7 @@ from .const.const import (
 )
 _LOGGER = logging.getLogger(__name__)
 
-class GasWaterLichtResterendSensor(BaseClass, RestoreSensor):
+class GasWaterLichtPlafondSensor(BaseClass, RestoreSensor):
     def __init__(
         self, 
         hass: HomeAssistant,
