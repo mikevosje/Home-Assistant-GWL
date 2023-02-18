@@ -14,7 +14,7 @@ from homeassistant.components.sensor import (
 from homeassistant.helpers import selector
 from .const.const import (
     _LOGGER, CONF_SOURCES_TOTAL_GAS, CONF_SOURCES_TOTAL_POWER, 
-    CONF_SOURCES_TOTAL_SOLAR, DOMAIN, NAME
+    CONF_SOURCES_TOTAL_SOLAR, DOMAIN, NAME, CONF_END_DATE_CONTRACT
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -44,6 +44,14 @@ SOURCES_TOTAL_GAS_SCHEMA = vol.Schema(
             selector.EntitySelectorConfig(
                 device_class=SensorDeviceClass.GAS, multiple=True)
         )
+    }
+)
+
+SOURCES_END_DATE_CONTRACT_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_END_DATE_CONTRACT): selector.TextSelector(
+            selector.TextSelectorConfig(type=selector.TextSelectorType.TEXT)
+        ),
     }
 )
 
@@ -97,7 +105,7 @@ class GasWaterLichtConfigFlow(ConfigFlow, domain=DOMAIN):
             return self.async_show_form(
                 step_id="gas_consumers", 
                 data_schema=SOURCES_TOTAL_GAS_SCHEMA,
-                last_step=True
+                last_step=False
             )
 
         # Show the power producers form.
@@ -115,12 +123,35 @@ class GasWaterLichtConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "invalid_sources_total_gas"
             else:
                 # If we have all data provided it's time to save to config.
-                return self.async_create_entry(title=DOMAIN, data=self._get_data())
+                # If we got all power producers defined, we go to the next step.
+                return self.async_show_form(
+                    step_id="end_date_contract", 
+                    data_schema=SOURCES_END_DATE_CONTRACT_SCHEMA,
+                    last_step=True
+                )
 
         # Show the power consumers form.
         return self.async_show_form(
             step_id="gas_consumers", 
             data_schema=SOURCES_TOTAL_GAS_SCHEMA, 
+            errors=errors,
+            last_step=False
+        )
+
+    async def async_step_end_date_contract(self, user_input=None):
+        errors = {}
+        if user_input is not None:
+            self._end_date_contract = user_input.get(CONF_END_DATE_CONTRACT, [])
+            if not self._sources_total_power:
+                errors["base"] = "invalid_end_date_contract"
+            else:
+                # If we have all data provided it's time to save to config.
+                return self.async_create_entry(title=DOMAIN, data=self._get_data())
+
+        # Show the power consumers form.
+        return self.async_show_form(
+            step_id="end_date_contract", 
+            data_schema=SOURCES_END_DATE_CONTRACT_SCHEMA, 
             errors=errors,
             last_step=True
         )
@@ -129,7 +160,8 @@ class GasWaterLichtConfigFlow(ConfigFlow, domain=DOMAIN):
         return {
             CONF_SOURCES_TOTAL_POWER: self._sources_total_power,
             CONF_SOURCES_TOTAL_SOLAR: self._sources_total_solar,
-            CONF_SOURCES_TOTAL_GAS: self._sources_total_gas
+            CONF_SOURCES_TOTAL_GAS: self._sources_total_gas,
+            CONF_END_DATE_CONTRACT: self._end_date_contract
         }
 
 
@@ -188,7 +220,7 @@ class PrijplafondOptionsFlow(OptionsFlow):
             return self.async_show_form(
                 step_id="gas_consumers", 
                 data_schema=SOURCES_TOTAL_GAS_SCHEMA,
-                last_step=True
+                last_step=False
             )
 
         # Show the power producers form.
@@ -211,7 +243,12 @@ class PrijplafondOptionsFlow(OptionsFlow):
                     self.config_entry, data=self.updated_config
                 )
 
-                return self.async_create_entry(title="", data=None)
+                # If we got all power producers defined, we go to the next step.
+                return self.async_show_form(
+                    step_id="end_date_contract", 
+                    data_schema=SOURCES_END_DATE_CONTRACT_SCHEMA,
+                    last_step=True
+                )
 
         # Show the power consumers form.
         return self.async_show_form(
@@ -219,4 +256,22 @@ class PrijplafondOptionsFlow(OptionsFlow):
             data_schema=SOURCES_TOTAL_GAS_SCHEMA, 
             errors=errors,
             last_step=True
+        )
+
+    async def async_step_end_date_contract(self, user_input=None):
+        if user_input is not None:
+            self.updated_config[CONF_END_DATE_CONTRACT] = user_input.get(CONF_END_DATE_CONTRACT, '')
+
+            self.hass.config_entries.async_update_entry(
+                self.config_entry, data=self.updated_config
+            )
+
+            return self.async_create_entry(title="", data=None)
+    
+
+        # Show the power producers form.
+        return self.async_show_form(
+            step_id="end_date_contract", 
+            data_schema=SOURCES_END_DATE_CONTRACT_SCHEMA,
+            last_step=False
         )

@@ -46,6 +46,7 @@ UNIT_OF_MEASUREMENT_POWER = "kWh"
 CONF_SOURCES_TOTAL_POWER = "sources_total_power"
 CONF_SOURCES_TOTAL_GAS = "sources_total_gas"
 CONF_SOURCES_TOTAL_SOLAR = "sources_total_solar"
+CONF_END_DATE_CONTRACT = "end_date_contract"
 
 # Attributes.
 ATTR_FRIENDLY_NAME = "friendly_name"
