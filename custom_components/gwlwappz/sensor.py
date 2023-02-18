@@ -50,6 +50,8 @@ from homeassistant.helpers.update_coordinator import (
     UpdateFailed,
 )
 from .GasWaterLichtResterend import GasWaterLichtResterendSensor
+from .GasWaterLichtTotaal import GasWaterLichtTotaalSensor
+from .GasWaterLichtPlafond import GasWaterLichtPlafondSensor
 from .GasWaterLichtSensor import GasWaterLichtSensor
 
 _LOGGER = logging.getLogger(__name__)
@@ -120,7 +122,83 @@ async def async_setup_entry(
                 config_entry.data.get(CONF_END_DATE_CONTRACT),
                 False,
                 config_entry.data.get(CONF_SOURCES_TOTAL_GAS)
-            )
+            ),
+            GasWaterLichtTotaalSensor(
+                hass,
+                "gas",
+                'Gas tot contract',
+                f"sensor.{DOMAIN}_gas_to_contract",
+                config_entry.data.get(CONF_END_DATE_CONTRACT),
+                True,
+                config_entry.data.get(CONF_SOURCES_TOTAL_GAS)
+            ),
+            GasWaterLichtTotaalSensor(
+                hass,
+                "power",
+                'Stroom tot contract',
+                f"sensor.{DOMAIN}_power_to_contract",
+                config_entry.data.get(CONF_END_DATE_CONTRACT),
+                True,
+                config_entry.data.get(CONF_SOURCES_TOTAL_POWER),
+                config_entry.data.get(CONF_SOURCES_TOTAL_SOLAR),
+            ),
+            GasWaterLichtTotaalSensor(
+                hass,
+                "gas",
+                'Gas vanaf contract',
+                f"sensor.{DOMAIN}_gas_since_contract",
+                config_entry.data.get(CONF_END_DATE_CONTRACT),
+                False,
+                config_entry.data.get(CONF_SOURCES_TOTAL_GAS)
+            ),
+            GasWaterLichtTotaalSensor(
+                hass,
+                "power",
+                'Stroom vanaf contract',
+                f"sensor.{DOMAIN}_power_since_contract",
+                config_entry.data.get(CONF_END_DATE_CONTRACT),
+                False,
+                config_entry.data.get(CONF_SOURCES_TOTAL_POWER),
+                config_entry.data.get(CONF_SOURCES_TOTAL_SOLAR),
+            ),
+            GasWaterLichtPlafondSensor(
+                hass,
+                "gas",
+                'Gas plafond tot contract',
+                f"sensor.{DOMAIN}_ceiling_gas_to_contract",
+                config_entry.data.get(CONF_END_DATE_CONTRACT),
+                True,
+                config_entry.data.get(CONF_SOURCES_TOTAL_GAS)
+            ),
+            GasWaterLichtPlafondSensor(
+                hass,
+                "power",
+                'Stroom plafond tot contract',
+                f"sensor.{DOMAIN}_ceiling_power_to_contract",
+                config_entry.data.get(CONF_END_DATE_CONTRACT),
+                True,
+                config_entry.data.get(CONF_SOURCES_TOTAL_POWER),
+                config_entry.data.get(CONF_SOURCES_TOTAL_SOLAR),
+            ),
+            GasWaterLichtPlafondSensor(
+                hass,
+                "gas",
+                'Gas plafond vanaf contract',
+                f"sensor.{DOMAIN}_ceiling_gas_since_contract",
+                config_entry.data.get(CONF_END_DATE_CONTRACT),
+                False,
+                config_entry.data.get(CONF_SOURCES_TOTAL_GAS)
+            ),
+            GasWaterLichtPlafondSensor(
+                hass,
+                "power",
+                'Stroom plafond vanaf contract',
+                f"sensor.{DOMAIN}_ceiling_power_since_contract",
+                config_entry.data.get(CONF_END_DATE_CONTRACT),
+                False,
+                config_entry.data.get(CONF_SOURCES_TOTAL_POWER),
+                config_entry.data.get(CONF_SOURCES_TOTAL_SOLAR),
+            ),
         ]
     , update_before_add=True)
 
