@@ -198,7 +198,7 @@ async def async_setup_entry(
                 False,
                 config_entry.data.get(CONF_SOURCES_TOTAL_POWER),
                 config_entry.data.get(CONF_SOURCES_TOTAL_SOLAR),
-            ),
+            )
         ]
     , update_before_add=True)
 
