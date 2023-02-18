@@ -77,7 +77,10 @@ class GasWaterLichtPredictionTotalSensor(BaseClass, RestoreSensor):
             stat_id = await self._getStatisticsId(entity_id);
             pos_usage += await self._get_value(stat_id)
 
-        total_usage = pos_usage
+
+        pos_end_value = self._calculate_end_value(pos_usage)
+
+        # total_usage = pos_end_value
         # _LOGGER.debug(f"[{self.entity_id}] In update total_usage is {total_usage}")
         # if total_usage < 0:
         #     total_usage = 0           
@@ -87,7 +90,9 @@ class GasWaterLichtPredictionTotalSensor(BaseClass, RestoreSensor):
             stat_id = await self._getStatisticsId(entity_id);
             neg_usage += await self._get_value(stat_id)
 
-        self._state = total_usage - neg_usage
+        total_usage = pos_end_value - neg_usage
+
+        self._state = total_usage
         
         if(self._type == 'gas'):
             # Entity specific.
@@ -101,20 +106,34 @@ class GasWaterLichtPredictionTotalSensor(BaseClass, RestoreSensor):
         # To make sure we don't get negative costs..
         # if self.this_month_costs < 0: self.this_month_costs = 0
 
-    async def _get_value(self, statistics_metadata_id):
-        state_old = await self._get_first_recorded_state_in_month(statistics_metadata_id)
-
+    async def _calculate_end_value(self, value):
         currentDay = datetime.now().today().day
         daysInMonth = monthrange(datetime.now().year, datetime.now().month)[1]
 
-        calculation = (state_old / currentDay) * daysInMonth
+        calculation = (value / currentDay) * daysInMonth
+
+        # _LOGGER.debug(f"[{self.entity_id}] old state is {state_old}")
+        if value is None:
+            # _LOGGER.error('Unable to find historic value for entity "%s". Skipping..', statistics_metadata_id)
+            return 0
+        try:
+            usage = float(calculation)
+            # _LOGGER.debug(f"Getting first recorded state of this month for: {statistics_metadata_id} resulted in: {usage}")
+        except ValueError:
+            # _LOGGER.warning(f"Unable to convert the first recorded state of this month for: {statistics_metadata_id} to float..Value is: {state_old.state}. Setting usage to 0.")
+            usage = 0
+
+        return usage 
+
+    async def _get_value(self, statistics_metadata_id):
+        state_old = await self._get_first_recorded_state_in_month(statistics_metadata_id)
 
         # _LOGGER.debug(f"[{self.entity_id}] old state is {state_old}")
         if state_old is None:
             # _LOGGER.error('Unable to find historic value for entity "%s". Skipping..', statistics_metadata_id)
             return 0
         try:
-            usage = float(calculation)
+            usage = float(state_old)
             # _LOGGER.debug(f"Getting first recorded state of this month for: {statistics_metadata_id} resulted in: {usage}")
         except ValueError:
             # _LOGGER.warning(f"Unable to convert the first recorded state of this month for: {statistics_metadata_id} to float..Value is: {state_old.state}. Setting usage to 0.")
