@@ -53,6 +53,8 @@ from .GasWaterLichtResterend import GasWaterLichtResterendSensor
 from .GasWaterLichtTotaal import GasWaterLichtTotaalSensor
 from .GasWaterLichtPlafond import GasWaterLichtPlafondSensor
 from .GasWaterLichtSensor import GasWaterLichtSensor
+from .GasWaterLichtPrediction import GasWaterLichtPredictionSensor
+from .GasWaterLichtPredictionTotal import GasWaterLichtPredictionTotalSensor
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -82,6 +84,7 @@ async def async_setup_entry(
                 config_entry.data.get(CONF_SOURCES_TOTAL_GAS)
             ),
 
+            # Resterend
             GasWaterLichtResterendSensor(
                 hass,
                 "power",
@@ -123,6 +126,7 @@ async def async_setup_entry(
                 False,
                 config_entry.data.get(CONF_SOURCES_TOTAL_GAS)
             ),
+            # Totaal
             GasWaterLichtTotaalSensor(
                 hass,
                 "gas",
@@ -161,6 +165,7 @@ async def async_setup_entry(
                 config_entry.data.get(CONF_SOURCES_TOTAL_POWER),
                 config_entry.data.get(CONF_SOURCES_TOTAL_SOLAR),
             ),
+            # plafond
             GasWaterLichtPlafondSensor(
                 hass,
                 "gas",
@@ -198,7 +203,36 @@ async def async_setup_entry(
                 False,
                 config_entry.data.get(CONF_SOURCES_TOTAL_POWER),
                 config_entry.data.get(CONF_SOURCES_TOTAL_SOLAR),
-            )
+            ),
+            GasWaterLichtPredictionSensor(
+                hass,
+                "gas",
+                'Voorspelde gas deze maand',
+                f"sensor.{DOMAIN}_predication_gas",
+                config_entry.data.get(CONF_END_DATE_CONTRACT),
+                False,
+                config_entry.data.get(CONF_SOURCES_TOTAL_GAS)
+            ),
+            GasWaterLichtPredictionSensor(
+                hass,
+                "power",
+                'Voorspelde stroom deze maand',
+                f"sensor.{DOMAIN}_predication_power",
+                config_entry.data.get(CONF_END_DATE_CONTRACT),
+                False,
+                config_entry.data.get(CONF_SOURCES_TOTAL_POWER),
+                config_entry.data.get(CONF_SOURCES_TOTAL_SOLAR),
+            ),
+            GasWaterLichtPredictionTotalSensor(
+                hass,
+                "powqer",
+                'Voorspelde stroom deze maand min teruglevering',
+                f"sensor.{DOMAIN}_predication_power_minus_return",
+                config_entry.data.get(CONF_END_DATE_CONTRACT),
+                False,
+                config_entry.data.get(CONF_SOURCES_TOTAL_POWER),
+                config_entry.data.get(CONF_SOURCES_TOTAL_SOLAR),
+            ),
         ]
     , update_before_add=True)
 
