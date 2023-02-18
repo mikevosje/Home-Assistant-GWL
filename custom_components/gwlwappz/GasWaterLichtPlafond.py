@@ -41,7 +41,7 @@ class GasWaterLichtPlafondSensor(BaseClass, RestoreSensor):
         positive_entities,
         negative_entities = [],
     ):
-        super(GasWaterLichtResterendSensor, self).__init__(hass, type)
+        super(GasWaterLichtPlafondSensor, self).__init__(hass, type)
         self.entity_id = sensor_friendly_name
         self.friendly_name = name
         
