@@ -77,8 +77,11 @@ class GasWaterLichtPredictionTotalSensor(BaseClass, RestoreSensor):
             stat_id = await self._getStatisticsId(entity_id);
             pos_usage += await self._get_value(stat_id)
 
+        _LOGGER.debug(f"[{self.entity_id}] pos usage {pos_usage}")
+        pos_end_value = await self._calculate_end_value(pos_usage)
 
-        pos_end_value = self._calculate_end_value(pos_usage)
+
+        _LOGGER.debug(f"[{self.entity_id}] pos end usage {pos_end_value}")
 
         # total_usage = pos_end_value
         # _LOGGER.debug(f"[{self.entity_id}] In update total_usage is {total_usage}")
@@ -90,7 +93,11 @@ class GasWaterLichtPredictionTotalSensor(BaseClass, RestoreSensor):
             stat_id = await self._getStatisticsId(entity_id);
             neg_usage += await self._get_value(stat_id)
 
+        _LOGGER.debug(f"[{self.entity_id}] neg usage {neg_usage}")
+
         total_usage = pos_end_value - neg_usage
+
+        _LOGGER.debug(f"[{self.entity_id}] total usage {total_usage}")
 
         self._state = total_usage
         
@@ -110,7 +117,11 @@ class GasWaterLichtPredictionTotalSensor(BaseClass, RestoreSensor):
         currentDay = datetime.now().today().day
         daysInMonth = monthrange(datetime.now().year, datetime.now().month)[1]
 
-        calculation = (value / currentDay) * daysInMonth
+        _LOGGER.debug(f"[{self.entity_id}] currentDay {currentDay}")
+        _LOGGER.debug(f"[{self.entity_id}] daysInMonth {daysInMonth}")
+
+        calculation = (float(value) / currentDay) * daysInMonth
+        _LOGGER.debug(f"[{self.entity_id}] calculation {calculation}")
 
         # _LOGGER.debug(f"[{self.entity_id}] old state is {state_old}")
         if value is None:
