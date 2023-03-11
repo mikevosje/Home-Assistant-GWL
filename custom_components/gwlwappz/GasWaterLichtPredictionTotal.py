@@ -162,8 +162,8 @@ class GasWaterLichtPredictionTotalSensor(BaseClass, RestoreSensor):
 
         try:
             cursor = self._dbconnection.cursor()
-            # _LOGGER.debug(f"SELECT MAX(state) - MIN(state) AS total_import FROM statistics WHERE metadata_id = '{statistics_metadata_id}' AND created >= datetime('{start_date}') AND created <= datetime('{end_date}');")
-            cursor.execute(f"SELECT MAX(state) - MIN(state) AS total_import FROM statistics WHERE metadata_id = '{statistics_metadata_id}' AND created >= datetime('{start_date}') AND created <= datetime('{end_date}');")
+            # _LOGGER.debug(f"SELECT MAX(state) - MIN(state) AS total_import FROM statistics WHERE metadata_id = '{statistics_metadata_id}' AND created_ts >= unixepoch('{start_date}') AND created_ts <= unixepoch('{end_date}');")
+            cursor.execute(f"SELECT MAX(state) - MIN(state) AS total_import FROM statistics WHERE metadata_id = '{statistics_metadata_id}' AND created_ts >= unixepoch('{start_date}') AND created_ts <= unixepoch('{end_date}');")
             record = cursor.fetchone()
             # _LOGGER.debug(record)
             if(record == None):

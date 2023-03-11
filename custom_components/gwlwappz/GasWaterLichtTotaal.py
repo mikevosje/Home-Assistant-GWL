@@ -74,17 +74,17 @@ class GasWaterLichtTotaalSensor(BaseClass, RestoreSensor):
         for entity_id in self._pos_sources:
             stat_id = await self._getStatisticsId(entity_id);
             pos_usage += await self._get_value(stat_id)
-            
+        _LOGGER.debug(f"[{self.entity_id}] In update pos_usage is {pos_usage}")
 
         # Negative entities are producers like solar panels.
         neg_usage = 0
         for entity_id in self._neg_sources:
             stat_id = await self._getStatisticsId(entity_id);
             neg_usage += await self._get_value(stat_id)
-        # _LOGGER.debug(f"[{self.entity_id}] In update neg_usage is {neg_usage}")
+        _LOGGER.debug(f"[{self.entity_id}] In update neg_usage is {neg_usage}")
 
         total_usage = pos_usage - neg_usage
-        # _LOGGER.debug(f"[{self.entity_id}] In update total_usage is {total_usage}")
+        _LOGGER.debug(f"[{self.entity_id}] In update total_usage is {total_usage}")
         # if total_usage < 0:
         #     total_usage = 0           
 
@@ -149,8 +149,8 @@ class GasWaterLichtTotaalSensor(BaseClass, RestoreSensor):
 
         try:
             cursor = self._dbconnection.cursor()
-            # _LOGGER.debug(f"SELECT MAX(state) - MIN(state) AS total_import FROM statistics WHERE metadata_id = '{statistics_metadata_id}' AND created >= datetime('{start_date}') AND created <= datetime('{end_date}');")
-            cursor.execute(f"SELECT MAX(state) - MIN(state) AS total_import FROM statistics WHERE metadata_id = '{statistics_metadata_id}' AND created >= datetime('{start_date}') AND created <= datetime('{end_date}');")
+            # _LOGGER.debug(f"SELECT MAX(state) - MIN(state) AS total_import FROM statistics WHERE metadata_id = '{statistics_metadata_id}' AND created_ts >= unixepoch('{start_date}') AND created_ts <= unixepoch('{end_date}');")
+            cursor.execute(f"SELECT MAX(state) - MIN(state) AS total_import FROM statistics WHERE metadata_id = '{statistics_metadata_id}' AND created_ts >= unixepoch('{start_date}') AND created_ts <= unixepoch('{end_date}');")
             record = cursor.fetchone()
             # _LOGGER.debug(record)
             if(record == None):
